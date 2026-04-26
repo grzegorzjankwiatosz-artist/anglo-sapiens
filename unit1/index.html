@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unit 1 — ABC · Anglo-Sapiens</title>
+  <meta name="theme-color" content="#0d1b2a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0d1b2a;
+      --navy-mid: #1a2f45;
+      --red: #c1121f;
+      --gold: #e9c46a;
+      --cream: #f8f4ec;
+      --white: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5c6b7a;
+      --border: #dde3ea;
+      --green: #2e7d32;
+      --green-bg: #e8f5e9;
+      --orange: #e65100;
+      --orange-bg: #fff3e0;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      padding: .8rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    nav a {
+      color: rgba(255,255,255,.6);
+      text-decoration: none;
+      font-size: .85rem;
+    }
+    nav a:hover { color: var(--gold); }
+    nav .sep { color: rgba(255,255,255,.2); }
+    nav .current { color: var(--gold); font-weight: 700; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+      padding: 2rem 1.4rem 2.2rem;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: 'ABC';
+      position: absolute;
+      right: -1rem; top: 50%; transform: translateY(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 9rem;
+      font-weight: 900;
+      color: rgba(255,255,255,.04);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .hero .unit-tag {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin: .3rem 0 .4rem;
+    }
+    .hero p { color: rgba(255,255,255,.6); font-size: .9rem; max-width: 480px; }
+
+    /* ── STAGE TABS ── */
+    .tabs {
+      background: var(--navy);
+      display: flex;
+      overflow-x: auto;
+      gap: 0;
+      border-bottom: 2px solid rgba(255,255,255,.08);
+    }
+    .tabs::-webkit-scrollbar { height: 0; }
+    .tab-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.45);
+      padding: .9rem 1.1rem;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color .2s, border-color .2s;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,.8); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── STAGE SECTIONS ── */
+    .stage { display: none; padding: 1.5rem 1.2rem 4rem; max-width: 760px; margin: 0 auto; }
+    .stage.active { display: block; }
+    .stage-header { margin-bottom: 1.5rem; }
+    .stage-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--navy);
+    }
+    .stage-header p { color: var(--muted); font-size: .9rem; margin-top: .3rem; line-height: 1.5; }
+
+    /* ── TIP BOX ── */
+    .tip {
+      background: #fff8e1;
+      border-left: 3px solid var(--gold);
+      padding: .8rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: .85rem;
+      color: #5a4000;
+      margin-bottom: 1.4rem;
+      line-height: 1.5;
+    }
+
+    /* ── ALPHABET TABLE ── */
+    .alpha-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: .7rem;
+      margin-bottom: 1.5rem;
+    }
+    .alpha-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: .8rem .7rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, border-color .15s;
+      position: relative;
+    }
+    .alpha-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(13,27,42,.1); border-color: var(--gold); }
+    .alpha-card .letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .alpha-card .sound {
+      font-size: .8rem;
+      color: var(--red);
+      font-weight: 700;
+      margin: .2rem 0 .3rem;
+      font-family: monospace;
+    }
+    .alpha-card .example {
+      font-size: .7rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .alpha-card .speak-btn {
+      position: absolute;
+      top: .4rem; right: .4rem;
+      background: none; border: none;
+      font-size: .85rem; cursor: pointer; opacity: .4;
+      transition: opacity .15s;
+    }
+    .alpha-card:hover .speak-btn { opacity: 1; }
+
+    /* ── AUDIO NOTE ── */
+    .audio-note {
+      background: var(--white);
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+      line-height: 1.5;
+    }
+    .audio-note strong { color: var(--navy); }
+    .audio-note code {
+      background: #f0f4f8;
+      padding: .1rem .35rem;
+      border-radius: 4px;
+      font-size: .78rem;
+    }
+
+    /* ── FLASHCARDS ── */
+    .flashcard-wrap {
+      perspective: 1000px;
+      max-width: 340px;
+      margin: 0 auto 1.5rem;
+    }
+    .flashcard {
+      width: 100%; height: 200px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .5s;
+      cursor: pointer;
+    }
+    .flashcard.flipped { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .5rem;
+      padding: 1.5rem;
+      border: 1.5px solid var(--border);
+    }
+    .card-front { background: var(--navy); }
+    .card-back { background: var(--white); transform: rotateY(180deg); }
+    .card-front .big-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem; font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .card-front .hint { color: rgba(255,255,255,.4); font-size: .75rem; }
+    .card-back .big-sound {
+      font-size: 2rem; font-weight: 700; color: var(--red);
+      font-family: monospace;
+    }
+    .card-back .mnemonic { font-size: .85rem; color: var(--muted); text-align: center; line-height: 1.4; }
+    .card-back .acronym { font-size: .9rem; font-weight: 700; color: var(--navy); }
+
+    .card-nav {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.2rem; margin-top: .8rem;
+    }
+    .card-nav button {
+      background: var(--navy); color: var(--white);
+      border: none; padding: .55rem 1.3rem;
+      border-radius: 8px; cursor: pointer; font-size: .85rem; font-weight: 700;
+    }
+    .card-nav button:disabled { opacity: .3; }
+    .card-nav .counter { font-size: .85rem; color: var(--muted); min-width: 60px; text-align: center; }
+    .card-speak {
+      display: block; text-align: center; margin-top: .6rem;
+      background: none; border: none; font-size: 1.3rem; cursor: pointer;
+    }
+
+    /* ── EXERCISE SECTIONS ── */
+    .exercise-block {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.3rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise-block h3 {
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--navy);
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .exercise-block h3 .ex-num {
+      background: var(--navy);
+      color: var(--gold);
+      font-size: .7rem;
+      padding: .15rem .5rem;
+      border-radius: 20px;
+    }
+    .exercise-block p { font-size: .88rem; color: var(--muted); margin-bottom: .8rem; line-height: 1.5; }
+
+    .spell-list { list-style: none; }
+    .spell-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .7rem;
+      padding: .55rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .spell-item:last-child { border-bottom: none; }
+    .spell-item .name { font-weight: 700; font-size: .9rem; min-width: 130px; }
+    .spell-item .phonetic {
+      font-family: monospace;
+      font-size: .78rem;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .spell-item .speak-word {
+      background: none; border: none;
+      font-size: 1rem; cursor: pointer; flex-shrink: 0; padding-top: .1rem;
+      opacity: .5; transition: opacity .15s;
+    }
+    .spell-item .speak-word:hover { opacity: 1; }
+
+    details.answer-toggle {
+      margin-top: .5rem;
+    }
+    details.answer-toggle summary {
+      cursor: pointer;
+      font-size: .8rem;
+      color: var(--red);
+      font-weight: 700;
+      user-select: none;
+      list-style: none;
+    }
+    details.answer-toggle summary::before { content: '▶ '; }
+    details.answer-toggle[open] summary::before { content: '▼ '; }
+    details.answer-toggle .answer-body {
+      background: #f8f4ec;
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      margin-top: .6rem;
+      font-family: monospace;
+      font-size: .8rem;
+      color: var(--navy);
+      line-height: 1.8;
+    }
+
+    /* ── DIALOGUE ── */
+    .dialogue {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .dialogue-header {
+      background: var(--navy);
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      padding: .55rem 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .dialogue-line {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .dialogue-line:last-child { border-bottom: none; }
+    .dialogue-line .en {
+      padding: .6rem .9rem;
+      font-size: .85rem;
+      background: #fff;
+      font-weight: 700;
+      border-right: 1px solid var(--border);
+    }
+    .dialogue-line .en .keyword { color: var(--red); }
+    .dialogue-line .pl {
+      padding: .6rem .9rem;
+      font-size: .82rem;
+      color: var(--muted);
+      background: #fafafa;
+    }
+    .dialogue-line .speaker {
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      display: block;
+      margin-bottom: .15rem;
+    }
+
+    /* ── QUIZ ── */
+    .quiz-progress {
+      background: var(--border);
+      height: 5px;
+      border-radius: 3px;
+      margin-bottom: 1.4rem;
+      overflow: hidden;
+    }
+    .quiz-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      border-radius: 3px;
+      transition: width .3s;
+    }
+    .quiz-score {
+      display: flex; gap: 1rem;
+      font-size: .85rem; margin-bottom: 1.2rem;
+    }
+    .score-good { color: var(--green); font-weight: 700; }
+    .score-bad { color: var(--red); font-weight: 700; }
+
+    .quiz-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .quiz-q-num { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: .2rem; }
+    .quiz-q-sub { font-size: .82rem; color: var(--muted); margin-bottom: 1rem; }
+    .quiz-options { display: grid; gap: .5rem; }
+    .quiz-opt {
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: .7rem 1rem;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      text-align: left;
+      font-family: monospace;
+    }
+    .quiz-opt:hover:not(:disabled) { background: #f0f4f8; border-color: var(--navy); }
+    .quiz-opt.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+    .quiz-opt.wrong { background: #ffebee; border-color: var(--red); color: var(--red); }
+    .quiz-feedback {
+      font-size: .82rem;
+      padding: .5rem .8rem;
+      border-radius: 7px;
+      margin-top: .5rem;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.ok { background: var(--green-bg); color: var(--green); }
+    .quiz-feedback.fail { background: #ffebee; color: var(--red); }
+
+    .quiz-next-btn {
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      padding: .7rem 1.8rem;
+      border-radius: 9px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: .8rem;
+      display: none;
+    }
+    .quiz-next-btn.show { display: inline-block; }
+
+    .quiz-result {
+      text-align: center;
+      padding: 2rem 1rem;
+      display: none;
+    }
+    .quiz-result.show { display: block; }
+    .quiz-result .grade {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .quiz-result h3 { font-size: 1.3rem; color: var(--navy); margin: .5rem 0 .3rem; }
+    .quiz-result p { color: var(--muted); margin-bottom: 1.2rem; }
+    .quiz-restart-btn {
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: .8rem 2rem;
+      border-radius: 10px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── NAV BOTTOM ── */
+    .stage-nav {
+      display: flex;
+      gap: .8rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .stage-nav button {
+      flex: 1; min-width: 120px;
+      padding: .75rem 1rem;
+      border-radius: 9px;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--navy);
+    }
+    .btn-prev { background: var(--white); color: var(--navy); }
+    .btn-next { background: var(--navy); color: var(--white); }
+
+    @media (max-width: 480px) {
+      .alpha-grid { grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+      .alpha-card .letter { font-size: 1.7rem; }
+      .alpha-card .sound { font-size: .68rem; }
+      .alpha-card .example { display: none; }
+      .dialogue-line { grid-template-columns: 1fr; }
+      .dialogue-line .en { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">Anglo-Sapiens</a>
+  <span class="sep">›</span>
+  <span class="current">Unit 1 — ABC</span>
+</nav>
+
+<div class="hero">
+  <div class="unit-tag">Unit 01</div>
+  <h1>ABC — The Alphabet</h1>
+  <p>Alfabet angielski: 26 liter, ich wymowa i literowanie w codziennych sytuacjach.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="goStage(0)">① Alfabet</button>
+  <button class="tab-btn" onclick="goStage(1)">② Fiszki</button>
+  <button class="tab-btn" onclick="goStage(2)">③ Ćwiczenia</button>
+  <button class="tab-btn" onclick="goStage(3)">④ Rozmowa</button>
+  <button class="tab-btn" onclick="goStage(4)">⑤ Quiz</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 1: ALPHABET TABLE
+     ════════════════════════════════════════════════ -->
+<section class="stage active" id="stage-0">
+  <div class="stage-header">
+    <h2>Alfabet angielski</h2>
+    <p>26 liter z wymową zapisaną po polsku. Kliknij literę, by usłyszeć jej dźwięk 🔊. Dwie kropki [i:] oznaczają długi dźwięk.</p>
+  </div>
+
+  <div class="audio-note">
+    <strong>🎵 Nagrania MP3</strong> — wczytywane automatycznie z folderu <code>mp3/</code>.<br>
+    Wgraj plik np. <code>letter-a.mp3</code> do folderu <code>unit1/mp3/</code> na GitHub — pojawi się automatycznie zamiast syntezatora.
+  </div>
+
+  <div class="alpha-grid" id="alphaGrid"></div>
+
+  <div class="tip">
+    💡 <strong>Wskazówka:</strong> Największy postęp robisz w ciągu pierwszych 24 godzin od zapoznania się z nowym materiałem. Wróć jutro i powtórz alfabet bez patrzenia na tabelę!
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn-next" onclick="goStage(1)">Przejdź do Fiszek →</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 2: FLASHCARDS
+     ════════════════════════════════════════════════ -->
+<section class="stage" id="stage-1">
+  <div class="stage-header">
+    <h2>Fiszki — litera → dźwięk</h2>
+    <p>Kliknij kartę, aby zobaczyć wymowę i skrótowiec. Przeglądaj po kolei lub kliknij 🔀, by losować.</p>
+  </div>
+
+  <div class="flashcard-wrap">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="card-face card-front">
+        <div class="big-letter" id="fc-letter">A</div>
+        <div class="hint">kliknij, aby zobaczyć wymowę</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="big-sound" id="fc-sound">[ej]</div>
+        <div class="acronym" id="fc-acronym">ABC</div>
+        <div class="mnemonic" id="fc-mnemonic">jak w ABC — początek alfabetu</div>
+      </div>
+    </div>
+  </div>
+  <button class="card-speak" id="fc-speak-btn" onclick="speakLetter(-1)">🔊 Posłuchaj wymowy</button>
+
+  <div class="card-nav">
+    <button onclick="prevCard()" id="fc-prev">← Poprzednia</button>
+    <span class="counter" id="fc-counter">1 / 26</span>
+    <button onclick="nextCard()" id="fc-next">Następna →</button>
+  </div>
+
+  <div style="text-align:center; margin-top:.8rem;">
+    <button onclick="shuffleCards()" style="background:none;border:1.5px solid var(--border);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;cursor:pointer;color:var(--muted);">🔀 Losuj kolejność</button>
+    <button onclick="resetCards()" style="background:none;border:1.5px solid var(--border);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;cursor:pointer;color:var(--muted);margin-left:.5rem;">↺ Reset</button>
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn-prev" onclick="goStage(0)">← Alfabet</button>
+    <button class="btn-next" onclick="goStage(2)">Przejdź do Ćwiczeń →</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 3: EXERCISES (1.3, 1.6, 1.9, 1.13)
+     ════════════════════════════════════════════════ -->
+<section class="stage" id="stage-2">
+  <div class="stage-header">
+    <h2>Ćwiczenia — Literowanie</h2>
+    <p>Przeliteruj głośno każdą pozycję, a następnie rozwiń odpowiedź, by sprawdzić się. Kliknij 🔊 przy haśle, by usłyszeć wymowę.</p>
+  </div>
+
+  <div class="tip">
+    💡 Jeśli nie znasz jeszcze liczb po angielsku — pomiń je. Wróć do nich gdy skończysz Unit 2.
+  </div>
+
+  <!-- 1.3 — Names -->
+  <div class="exercise-block">
+    <h3><span class="ex-num">1.3</span> Przeliteruj imiona i nazwiska</h3>
+    <p>Powiedz każdą literę na głos. Używaj dźwięków z tabeli, nie polskich nazw liter!</p>
+    <ul class="spell-list" id="list-names"></ul>
+  </div>
+
+  <!-- 1.6 — Addresses -->
+  <div class="exercise-block">
+    <h3><span class="ex-num">1.6</span> Przeliteruj adresy</h3>
+    <p>Przeliteruj nazwy ulic, miast i kody pocztowe. Spacje mów jako <em>"space"</em>.</p>
+    <ul class="spell-list" id="list-addresses"></ul>
+  </div>
+
+  <!-- 1.9 — License plates -->
+  <div class="exercise-block">
+    <h3><span class="ex-num">1.9</span> Przeliteruj tablice rejestracyjne</h3>
+    <p>Ćwicz podczas jazdy lub stania w korku. Tablice wymawiaj literka po literce, cyfry po angielsku.</p>
+    <ul class="spell-list" id="list-plates"></ul>
+  </div>
+
+  <!-- 1.13 — Emails -->
+  <div class="exercise-block">
+    <h3><span class="ex-num">1.13</span> Przeliteruj adresy e-mail</h3>
+    <p><strong>@</strong> = "at" · <strong>.</strong> = "dot" · <strong>-</strong> = "hyphen" · <strong>_</strong> = "underscore"</p>
+    <ul class="spell-list" id="list-emails"></ul>
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn-prev" onclick="goStage(1)">← Fiszki</button>
+    <button class="btn-next" onclick="goStage(3)">Przejdź do Rozmowy →</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 4: DIALOGUE
+     ════════════════════════════════════════════════ -->
+<section class="stage" id="stage-3">
+  <div class="stage-header">
+    <h2>Mini-konwersacje</h2>
+    <p>Typowe sytuacje, w których musisz literować po angielsku. Czytaj obie kwestie na głos.</p>
+  </div>
+
+  <div class="dialogue">
+    <div class="dialogue-header">
+      <span>Dialogue 1 — Podajesz swoje imię</span>
+      <button onclick="speakText('Can you spell your name please? Sure. My name is Anna Żuk. That is A N N A, Ż U K.')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:1rem;">🔊</button>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">A</span>Can you <span class="keyword">spell</span> your name, please?</div>
+      <div class="pl"><span class="speaker">A</span>Czy możesz przeliterować swoje imię?</div>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">B</span>Sure. My name is Anna Żuk.<br><span class="keyword">[ej][en][en][ej], [zed][ju:][kej]</span></div>
+      <div class="pl"><span class="speaker">B</span>Oczywiście. Mam na imię Anna Żuk.</div>
+    </div>
+  </div>
+
+  <div class="dialogue">
+    <div class="dialogue-header">
+      <span>Dialogue 2 — Podajesz adres</span>
+      <button onclick="speakText('Can you spell your address please? Of course. 5 Roger Way. Five, R O G E R, W A Y. Oxford. O X F O R D.')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:1rem;">🔊</button>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">A</span>Can you <span class="keyword">spell</span> your address?</div>
+      <div class="pl"><span class="speaker">A</span>Czy możesz przeliterować adres?</div>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">B</span>Of course. 5 Roger Way.<br><span class="keyword">Five, [a:][oł][dżi:][i:][a:], [dabelju:][ej][łaj]</span></div>
+      <div class="pl"><span class="speaker">B</span>Oczywiście. 5 Roger Way.</div>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">A</span>And the city?</div>
+      <div class="pl"><span class="speaker">A</span>A miasto?</div>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">B</span>Oxford. <span class="keyword">[oł][eks][ef][oł][a:][di:]</span></div>
+      <div class="pl"><span class="speaker">B</span>Oxford.</div>
+    </div>
+  </div>
+
+  <div class="dialogue">
+    <div class="dialogue-header">
+      <span>Dialogue 3 — Podajesz e-mail</span>
+      <button onclick="speakText('Can you spell your email please? Yes. adam dot tomaszewski at wp dot pl.')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:1rem;">🔊</button>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">A</span>Can you spell your <span class="keyword">email</span>, please?</div>
+      <div class="pl"><span class="speaker">A</span>Czy możesz przeliterować swój e-mail?</div>
+    </div>
+    <div class="dialogue-line">
+      <div class="en"><span class="speaker">B</span>Yes — adam <span class="keyword">dot</span> tomaszewski <span class="keyword">at</span> wp <span class="keyword">dot</span> pl.<br>
+        <span class="keyword">[ej][di:][ej][em] dot [ti:][oł][em][ej][es][zed]…</span></div>
+      <div class="pl"><span class="speaker">B</span>Tak — adam kropka tomaszewski małpa wp kropka pl.</div>
+    </div>
+  </div>
+
+  <div class="audio-note" style="margin-top:1.2rem;">
+    <strong>🎵 Własne nagrania dialogów</strong> — wgraj <code>dialog1.mp3</code>, <code>dialog2.mp3</code>, <code>dialog3.mp3</code> do folderu <code>unit1/mp3/</code> na GitHub. Przycisk 🔊 użyje Twojego nagrania zamiast syntezatora.
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn-prev" onclick="goStage(2)">← Ćwiczenia</button>
+    <button class="btn-next" onclick="goStage(4)">Przejdź do Quizu →</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 5: QUIZ
+     ════════════════════════════════════════════════ -->
+<section class="stage" id="stage-4">
+  <div class="stage-header">
+    <h2>Quiz sprawdzający</h2>
+    <p>10 pytań — wybierz poprawną wymowę litery. Powodzenia!</p>
+  </div>
+
+  <div class="quiz-progress"><div class="quiz-progress-bar" id="qbar" style="width:0%"></div></div>
+  <div class="quiz-score">
+    <span>✓ <span class="score-good" id="q-ok">0</span></span>
+    <span>✗ <span class="score-bad" id="q-bad">0</span></span>
+    <span style="color:var(--muted)" id="q-pos">Pytanie 1 z 10</span>
+  </div>
+
+  <div id="quiz-body">
+    <div class="quiz-card">
+      <div class="quiz-q-num" id="q-num">Pytanie 1 z 10</div>
+      <div class="quiz-q-text" id="q-text">Jak wymawia się litera…?</div>
+      <div class="quiz-q-sub" id="q-sub"></div>
+      <div class="quiz-options" id="q-opts"></div>
+      <div class="quiz-feedback" id="q-feedback"></div>
+      <button class="quiz-next-btn" id="q-next" onclick="nextQuestion()">Następne pytanie →</button>
+    </div>
+  </div>
+
+  <div class="quiz-result" id="quiz-result">
+    <div class="grade" id="q-grade">A</div>
+    <h3 id="q-result-title">Świetnie!</h3>
+    <p id="q-result-msg">Znasz angielski alfabet!</p>
+    <button class="quiz-restart-btn" onclick="restartQuiz()">↺ Spróbuj ponownie</button>
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn-prev" onclick="goStage(3)">← Rozmowa</button>
+  </div>
+</section>
+
+<script>
+// ════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════
+const ALPHABET = [
+  { l:'A', s:'[ej]',       ac:'ABC',   tip:'początek alfabetu, jak w ABC' },
+  { l:'B', s:'[bi:]',      ac:'BBC',   tip:'BBC — Brytyjska Korporacja Radiowo-Telewizyjna' },
+  { l:'C', s:'[si:]',      ac:'CD',    tip:'CD — płyta kompaktowa' },
+  { l:'D', s:'[di:]',      ac:'DVD',   tip:'DVD — odtwarzacz video' },
+  { l:'E', s:'[i:]',       ac:'e-mail',tip:'e-mail, E.T., eBay' },
+  { l:'F', s:'[ef]',       ac:'',      tip:'wymawiaj jak po polsku' },
+  { l:'G', s:'[dżi:]',     ac:'GPS',   tip:'GPS — system nawigacji satelitarnej' },
+  { l:'H', s:'[ejcz]',     ac:'HBO',   tip:'HBO, NHS — można też [hejcz]' },
+  { l:'I', s:'[aj]',       ac:'IQ',    tip:'I — ja, IQ, iPhone' },
+  { l:'J', s:'[dżej]',     ac:'DJ',    tip:'DJ — disc jockey, J.Lo' },
+  { l:'K', s:'[kej]',      ac:'OK!',   tip:'OK!, KFC' },
+  { l:'L', s:'[el]',       ac:'',      tip:'wymawiaj jak po polsku' },
+  { l:'M', s:'[em]',       ac:'',      tip:'wymawiaj jak po polsku' },
+  { l:'N', s:'[en]',       ac:'',      tip:'wymawiaj jak po polsku' },
+  { l:'O', s:'[oł]',       ac:'OK!',   tip:'OK!, OMD — zespół muzyczny' },
+  { l:'P', s:'[pi:]',      ac:'GPS',   tip:'GPS, VIP — Very Important Person' },
+  { l:'Q', s:'[kju:]',     ac:'BBQ',   tip:'BBQ — barbecue, IQ' },
+  { l:'R', s:'[a:]',       ac:'',      tip:'wymawiaj jak długą literę a' },
+  { l:'S', s:'[es]',       ac:'',      tip:'wymawiaj jak po polsku' },
+  { l:'T', s:'[ti:]',      ac:'TV',    tip:'TV — telewizja' },
+  { l:'U', s:'[ju:]',      ac:'UK',    tip:'UK, USA, U2, UB40' },
+  { l:'V', s:'[vi:]',      ac:'VIP',   tip:'VIP — Very Important Person, TV' },
+  { l:'W', s:'[dabelju:]', ac:'www',   tip:'George W. Bush, podwójne UU' },
+  { l:'X', s:'[eks]',      ac:'ex',    tip:'ex — były/była partner/ka' },
+  { l:'Y', s:'[łaj]',      ac:'WHY?',  tip:'WHY? = dlaczego, YMCA' },
+  { l:'Z', s:'[zed]',      ac:'',      tip:'jak po polsku z wyraźnym \'d\' na końcu' },
+];
+
+const NAMES = [
+  { name:'Gordon Williams',     ph:'[dżi:][oł][a:][di:][oł][en] [dabelju:][aj][el][el][aj][ej][em][es]' },
+  { name:'Jan Kowalski',        ph:'[dżej][ej][en] [kej][oł][dabelju:][ej][el][es][kej][aj]' },
+  { name:'George W. Bush',      ph:'[dżi:][i:][oł][a:][dżi:][i:] [dabelju:] [bi:][ju:][es][ejcz]' },
+  { name:'Elżbieta Świeszcz',   ph:'[i:][el][zed][bi:][aj][i:][ti:][ej] [es][dabelju:][aj][i:][es][zed][si:][zed]' },
+  { name:'Tomasz Zając-Król',   ph:'[ti:][oł][em][ej][es][zed] [zed][ej][dżej][ej][si:], [hajfn], [kej][a:][oł][el]' },
+  { name:'Arshpreet Chakrabarti',ph:'[ej][a:][es][ejcz][pi:][a:][i:][i:][ti:] [si:][ejcz][ej][kej][a:][ej][bi:][ej][a:][ti:][aj]' },
+  { name:'Bridget Jones',        ph:'[bi:][a:][aj][di:][dżi:][i:][ti:] [dżej][oł][en][i:][es]' },
+  { name:'Advik Prakash',        ph:'[ej][di:][vi:][aj][kej] [pi:][a:][ej][kej][ej][es][ejcz]' },
+];
+
+const ADDRESSES = [
+  { name:'Ogrodowa 3a, Warszawa, 00-217',
+    ph:'[oł][dżi:][a:][oł][di:][oł][dabelju:][ej], three [ej] · [dabelju:][ej][a:][es][zed][ej][dabelju:][ej] · zero, zero [hajfn] two, one, seven' },
+  { name:'5 Roger Way, Oxford, OX1 3TD',
+    ph:'five [a:][oł][dżi:][i:][a:] space [dabelju:][ej][łaj] · [oł][eks][ef][oł][a:][di:] · [oł][eks] one, three, [ti:][di:]' },
+  { name:'10 Hill Line, Hull, HU12 8JB',
+    ph:'ten [ejcz][aj][el][el] space [el][aj][en][i:] · [ejcz][ju:][el][el] · [ejcz][ju:] one, two, eight, [dżej][bi:]' },
+];
+
+const PLATES = [
+  { name:'ZSD 5206 B',  ph:'[zed][es][di:] five, two, zero, six, [bi:]' },
+  { name:'SCZ 8571 A',  ph:'[es][si:][zed] eight, five, seven, one, [ej]' },
+  { name:'FG11 GJU',    ph:'[ef][dżi:] one, one, [dżi:][dżej][ju:]' },
+  { name:'WK 4709 C',   ph:'[dabelju:][kej] four, seven, zero, nine, [si:]' },
+  { name:'EX65 SCR',    ph:'[i:][eks] six, five, [es][si:][a:]' },
+  { name:'LU53 VXU',    ph:'[el][ju:] five, three, [vi:][eks][ju:]' },
+  { name:'TT69 OMD',    ph:'[ti:][ti:] six, nine, [oł][em][di:]' },
+  { name:'OK18 GPS',    ph:'[oł][kej] one, eight, [dżi:][pi:][es]' },
+];
+
+const EMAILS = [
+  { name:'adam.tomaszewski@wp.pl',
+    ph:'[ej][di:][ej][em] dot [ti:][oł][em][ej][es][zed][i:][dabelju:][es][kej][aj] at [dabelju:][pi:] dot [pi:][el]' },
+  { name:'alex-write@kenwood.com',
+    ph:'[ej][el][i:][eks] hyphen [dabelju:][a:][aj][ti:][i:] at [kej][i:][en][dabelju:][oł][oł][di:] dot [si:][oł][em]' },
+  { name:'asiazwarszawy@onet.pl',
+    ph:'[ej][es][aj][ej][zed][dabelju:][ej][a:][es][zed][ej][dabelju:][łaj] at [oł][en][i:][ti:] dot [pi:][el]' },
+  { name:'baby_pink@hotmail.com',
+    ph:'[bi:][ej][bi:][łaj] underscore [pi:][aj][en][kej] at [ejcz][oł][ti:][em][ej][aj][el] dot [si:][oł][em]' },
+];
+
+// ════════════════════════════════════════════════
+// STAGE SWITCHING
+// ════════════════════════════════════════════════
+function goStage(n) {
+  document.querySelectorAll('.stage').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════
+// STAGE 1: BUILD ALPHABET GRID
+// ════════════════════════════════════════════════
+function buildAlphaGrid() {
+  const grid = document.getElementById('alphaGrid');
+  ALPHABET.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'alpha-card';
+    card.innerHTML = `
+      <button class="speak-btn" onclick="event.stopPropagation();speakLetter(${i})">🔊</button>
+      <div class="letter">${item.l}</div>
+      <div class="sound">${item.s}</div>
+      <div class="example">${item.ac}</div>
+    `;
+    card.addEventListener('click', () => speakLetter(i));
+    grid.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════════
+// SPEECH
+// ════════════════════════════════════════════════
+function speakLetter(idx) {
+  const item = idx === -1 ? ALPHABET[fcIndex] : ALPHABET[idx];
+  // Try MP3 first
+  const mp3 = new Audio(`mp3/letter-${item.l.toLowerCase()}.mp3`);
+  mp3.onerror = () => {
+    // Fallback to Web Speech API — speak the English letter name
+    const utter = new SpeechSynthesisUtterance(item.l);
+    utter.lang = 'en-GB';
+    utter.rate = 0.85;
+    speechSynthesis.speak(utter);
+  };
+  mp3.play().catch(() => {
+    const utter = new SpeechSynthesisUtterance(item.l);
+    utter.lang = 'en-GB';
+    utter.rate = 0.85;
+    speechSynthesis.speak(utter);
+  });
+}
+
+function speakText(text) {
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-GB';
+  utter.rate = 0.85;
+  speechSynthesis.speak(utter);
+}
+
+function speakWord(word) {
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.lang = 'en-GB';
+  speechSynthesis.speak(utter);
+}
+
+// ════════════════════════════════════════════════
+// STAGE 2: FLASHCARDS
+// ════════════════════════════════════════════════
+let fcOrder = [...Array(26).keys()];
+let fcIndex = 0;
+let fcFlipped = false;
+
+function renderCard() {
+  const item = ALPHABET[fcOrder[fcIndex]];
+  document.getElementById('fc-letter').textContent = item.l;
+  document.getElementById('fc-sound').textContent = item.s;
+  document.getElementById('fc-acronym').textContent = item.ac;
+  document.getElementById('fc-mnemonic').textContent = item.tip;
+  document.getElementById('fc-counter').textContent = `${fcIndex+1} / 26`;
+  document.getElementById('fc-prev').disabled = fcIndex === 0;
+  document.getElementById('fc-next').disabled = fcIndex === 25;
+  // unflip
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+  fcFlipped = false;
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  fcFlipped = !fcFlipped;
+  fc.classList.toggle('flipped', fcFlipped);
+  if (fcFlipped) speakLetter(-1);
+}
+
+function prevCard() { if (fcIndex > 0) { fcIndex--; renderCard(); } }
+function nextCard() { if (fcIndex < 25) { fcIndex++; renderCard(); } }
+
+function shuffleCards() {
+  for (let i = fcOrder.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]];
+  }
+  fcIndex = 0;
+  renderCard();
+}
+function resetCards() {
+  fcOrder = [...Array(26).keys()];
+  fcIndex = 0;
+  renderCard();
+}
+
+// ════════════════════════════════════════════════
+// STAGE 3: BUILD EXERCISE LISTS
+// ════════════════════════════════════════════════
+function buildList(containerId, data) {
+  const ul = document.getElementById(containerId);
+  data.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'spell-item';
+    li.innerHTML = `
+      <span class="name">${item.name}</span>
+      <details class="answer-toggle" style="flex:1">
+        <summary>Pokaż odpowiedź</summary>
+        <div class="answer-body">${item.ph}</div>
+      </details>
+      <button class="speak-word" onclick="speakWord('${item.name.replace(/'/g,"\\'")}')">🔊</button>
+    `;
+    ul.appendChild(li);
+  });
+}
+
+// ════════════════════════════════════════════════
+// STAGE 5: QUIZ
+// ════════════════════════════════════════════════
+let quizQuestions = [];
+let qIdx = 0;
+let qOk = 0;
+let qBad = 0;
+let qAnswered = false;
+
+function buildQuiz() {
+  // Pick 10 random letters
+  const shuffled = [...ALPHABET].sort(() => Math.random()-.5);
+  quizQuestions = shuffled.slice(0,10).map(item => {
+    // 4 options: correct + 3 random wrong
+    const wrong = ALPHABET.filter(a => a.l !== item.l)
+      .sort(() => Math.random()-.5).slice(0,3).map(a => a.s);
+    const opts = [...wrong, item.s].sort(() => Math.random()-.5);
+    return { letter: item.l, correct: item.s, opts, acronym: item.ac };
+  });
+  qIdx = 0; qOk = 0; qBad = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (qIdx >= quizQuestions.length) { showResult(); return; }
+  qAnswered = false;
+  const q = quizQuestions[qIdx];
+  document.getElementById('q-num').textContent = `Pytanie ${qIdx+1} z ${quizQuestions.length}`;
+  document.getElementById('q-pos').textContent = `Pytanie ${qIdx+1} z ${quizQuestions.length}`;
+  document.getElementById('qbar').style.width = `${(qIdx/quizQuestions.length)*100}%`;
+  document.getElementById('q-text').textContent = `Jak wymawia się litera "${q.letter}"?`;
+  document.getElementById('q-sub').textContent = q.acronym ? `Przykład: ${q.acronym}` : '';
+  document.getElementById('q-ok').textContent = qOk;
+  document.getElementById('q-bad').textContent = qBad;
+
+  const optsDiv = document.getElementById('q-opts');
+  optsDiv.innerHTML = '';
+  q.opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerQ(opt, btn);
+    optsDiv.appendChild(btn);
+  });
+
+  document.getElementById('q-feedback').className = 'quiz-feedback';
+  document.getElementById('q-feedback').textContent = '';
+  document.getElementById('q-next').className = 'quiz-next-btn';
+}
+
+function answerQ(chosen, btn) {
+  if (qAnswered) return;
+  qAnswered = true;
+  const q = quizQuestions[qIdx];
+  const fb = document.getElementById('q-feedback');
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+
+  if (chosen === q.correct) {
+    btn.classList.add('correct');
+    qOk++;
+    fb.textContent = '✓ Dobrze!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    qBad++;
+    fb.textContent = `✗ Poprawna odpowiedź: ${q.correct}`;
+    fb.className = 'quiz-feedback show fail';
+    // highlight correct
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.textContent === q.correct) b.classList.add('correct');
+    });
+  }
+  document.getElementById('q-ok').textContent = qOk;
+  document.getElementById('q-bad').textContent = qBad;
+  document.getElementById('q-next').className = 'quiz-next-btn show';
+}
+
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+function showResult() {
+  document.getElementById('quiz-body').style.display = 'none';
+  const res = document.getElementById('quiz-result');
+  res.className = 'quiz-result show';
+  document.getElementById('qbar').style.width = '100%';
+
+  const pct = qOk / quizQuestions.length;
+  let grade, title, msg;
+  if (pct >= .9) { grade='A'; title='Świetnie!'; msg='Alfabet opanowany na medal! Teraz ćwicz codziennie.'; }
+  else if (pct >= .7) { grade='B'; title='Dobrze!'; msg='Prawie perfekcja. Wróć do fiszek i powtórz trudniejsze litery.'; }
+  else { grade='C'; title='Ćwicz dalej!'; msg='Wróć do etapu Alfabet i Fiszki — regularność to klucz.'; }
+
+  document.getElementById('q-grade').textContent = grade;
+  document.getElementById('q-result-title').textContent = title;
+  document.getElementById('q-result-msg').textContent = `${qOk} / ${quizQuestions.length} poprawnych odpowiedzi. ${msg}`;
+}
+
+function restartQuiz() {
+  document.getElementById('quiz-body').style.display = 'block';
+  document.getElementById('quiz-result').className = 'quiz-result';
+  buildQuiz();
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+buildAlphaGrid();
+renderCard();
+buildList('list-names', NAMES);
+buildList('list-addresses', ADDRESSES);
+buildList('list-plates', PLATES);
+buildList('list-emails', EMAILS);
+buildQuiz();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/anglo-sapiens/sw.js', { scope: '/anglo-sapiens/' }).catch(()=>{});
+}
+</script>
+</body>
+</html>
