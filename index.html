@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anglo-Sapiens — Kurs Angielskiego</title>
+  <meta name="description" content="Anglo-Sapiens — skuteczny kurs angielskiego dla Polaków. Ucz się od podstaw z nagraniami i interaktywnymi ćwiczeniami."/>
+  <meta name="theme-color" content="#0d1b2a"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇬🇧</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0d1b2a;
+      --navy-mid: #1a2f45;
+      --red: #c1121f;
+      --red-light: #e63946;
+      --gold: #e9c46a;
+      --cream: #f8f4ec;
+      --white: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5c6b7a;
+      --card-bg: #ffffff;
+      --border: #dde3ea;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 3rem 1.5rem 4rem;
+      text-align: center;
+      background: linear-gradient(160deg, var(--navy) 0%, #1a2f45 50%, #0d1b2a 100%);
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,.03) 40px, rgba(255,255,255,.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,.03) 40px, rgba(255,255,255,.03) 41px);
+      pointer-events: none;
+    }
+    .flag-stripe {
+      display: flex;
+      justify-content: center;
+      gap: .4rem;
+      margin-bottom: 1.4rem;
+    }
+    .flag-stripe span {
+      width: 36px; height: 5px; border-radius: 3px;
+    }
+    .flag-stripe .s1 { background: var(--red); }
+    .flag-stripe .s2 { background: var(--white); }
+    .flag-stripe .s3 { background: var(--red); }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 30%, var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand em { font-style: italic; color: var(--red); -webkit-text-fill-color: var(--red-light); }
+    .tagline {
+      margin-top: .7rem;
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.65);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+    }
+    .stat span { font-size: .75rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .1em; }
+
+    /* ── MAIN ── */
+    main { background: var(--cream); color: var(--text); }
+
+    .section-title {
+      text-align: center;
+      padding: 3rem 1rem 1.5rem;
+    }
+    .section-title h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+    }
+    .section-title p { color: var(--muted); margin-top: .4rem; font-size: .95rem; }
+
+    /* ── UNITS GRID ── */
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+      padding: 0 1.2rem 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .unit-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .unit-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(13,27,42,.15); }
+    .unit-card.locked { opacity: .55; cursor: default; pointer-events: none; }
+
+    .unit-card-top {
+      padding: 1.3rem 1.4rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .unit-num {
+      background: var(--navy);
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .unit-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); line-height: 1.2; }
+    .unit-info .subtitle { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+
+    .unit-desc {
+      padding: 0 1.4rem .8rem;
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .unit-card-footer {
+      padding: .7rem 1.4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .unit-card-footer .pill {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 20px;
+    }
+    .pill-available { background: #e8f5e9; color: #2e7d32; }
+    .pill-soon { background: #fff3e0; color: #e65100; }
+    .unit-card-footer .stages { font-size: .78rem; color: var(--muted); }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      background: var(--navy);
+      color: var(--white);
+      padding: 3rem 1.2rem;
+    }
+    .how h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      text-align: center;
+      margin-bottom: .3rem;
+    }
+    .how .sub { text-align: center; color: rgba(255,255,255,.5); font-size: .9rem; margin-bottom: 2rem; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .step {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .step .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .step h4 { font-size: .85rem; font-weight: 700; margin: .4rem 0 .2rem; }
+    .step p { font-size: .75rem; color: rgba(255,255,255,.5); line-height: 1.4; }
+
+    /* ── INSTALL BANNER ── */
+    #pwa-banner {
+      display: none;
+      position: fixed;
+      bottom: 1rem; left: 50%; transform: translateX(-50%);
+      background: var(--navy);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      padding: .9rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,.4);
+      z-index: 999;
+      max-width: 360px; width: 90%;
+    }
+    #pwa-banner p { font-size: .85rem; color: rgba(255,255,255,.8); flex: 1; }
+    #pwa-banner strong { color: var(--gold); }
+    #pwa-install { background: var(--red); color: #fff; border: none; padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; font-weight: 700; cursor: pointer; }
+    #pwa-close { background: none; border: none; color: rgba(255,255,255,.4); font-size: 1.2rem; cursor: pointer; padding: 0 .3rem; }
+
+    footer {
+      background: var(--navy);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .78rem;
+      color: rgba(255,255,255,.3);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="flag-stripe"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
+  <div class="brand">Anglo&#8209;<em>Sapiens</em></div>
+  <p class="tagline">Angielski dla każdego Polaka</p>
+  <div class="stats">
+    <div class="stat"><strong>13</strong><span>ćwiczeń / unit</span></div>
+    <div class="stat"><strong>5</strong><span>etapów</span></div>
+    <div class="stat"><strong>PWA</strong><span>działa offline</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="section-title">
+    <h2>Moduły kursu</h2>
+    <p>Wybierz unit — każdy to 5 etapów od teorii do swobodnego użycia.</p>
+  </div>
+
+  <div class="units-grid">
+
+    <!-- UNIT 1 — AVAILABLE -->
+    <a href="unit1/index.html" class="unit-card">
+      <div class="unit-card-top">
+        <div class="unit-num">01</div>
+        <div class="unit-info">
+          <h3>ABC — The Alphabet</h3>
+          <div class="subtitle">Alfabet angielski</div>
+        </div>
+      </div>
+      <p class="unit-desc">Wymowa 26 liter, literowanie imion, adresów, tablic rejestracyjnych i e-maili. Podstawa każdej rozmowy.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-available">✓ Dostępny</span>
+        <span class="stages">5 etapów · 13 ćwiczeń</span>
+      </div>
+    </a>
+
+    <!-- UNIT 2 — COMING SOON -->
+    <div class="unit-card locked">
+      <div class="unit-card-top">
+        <div class="unit-num">02</div>
+        <div class="unit-info">
+          <h3>Numbers</h3>
+          <div class="subtitle">Liczby i cyfry</div>
+        </div>
+      </div>
+      <p class="unit-desc">Liczby od 0 do miliona, numery telefonów, ceny, daty i godziny po angielsku.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-soon">Wkrótce</span>
+        <span class="stages">5 etapów</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked">
+      <div class="unit-card-top">
+        <div class="unit-num">03</div>
+        <div class="unit-info">
+          <h3>Greetings</h3>
+          <div class="subtitle">Powitania i pożegnania</div>
+        </div>
+      </div>
+      <p class="unit-desc">Hello, goodbye, how are you — pierwsze zwroty w rozmowie i kulturze brytyjskiej.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-soon">Wkrótce</span>
+        <span class="stages">5 etapów</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked">
+      <div class="unit-card-top">
+        <div class="unit-num">04</div>
+        <div class="unit-info">
+          <h3>Personal Info</h3>
+          <div class="subtitle">Dane osobowe</div>
+        </div>
+      </div>
+      <p class="unit-desc">Imię, nazwisko, wiek, zawód, adres — wypełnianie formularzy i rozmowa o sobie.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-soon">Wkrótce</span>
+        <span class="stages">5 etapów</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked">
+      <div class="unit-card-top">
+        <div class="unit-num">05</div>
+        <div class="unit-info">
+          <h3>Days & Months</h3>
+          <div class="subtitle">Dni i miesiące</div>
+        </div>
+      </div>
+      <p class="unit-desc">Dni tygodnia, miesiące, daty — umawianie spotkań i rozmowa o czasie.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-soon">Wkrótce</span>
+        <span class="stages">5 etapów</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked">
+      <div class="unit-card-top">
+        <div class="unit-num">06</div>
+        <div class="unit-info">
+          <h3>Family</h3>
+          <div class="subtitle">Rodzina</div>
+        </div>
+      </div>
+      <p class="unit-desc">Słownictwo rodzinne, opowiadanie o swojej rodzinie, pytania o bliskich.</p>
+      <div class="unit-card-footer">
+        <span class="pill pill-soon">Wkrótce</span>
+        <span class="stages">5 etapów</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<section class="how">
+  <h2>Jak działa kurs</h2>
+  <p class="sub">5 etapów w każdym unicie — od teorii do praktyki</p>
+  <div class="steps">
+    <div class="step"><div class="num">①</div><h4>Teoria</h4><p>Tabela z wymową i przykładami skrótowców</p></div>
+    <div class="step"><div class="num">②</div><h4>Fiszki</h4><p>Litera → dźwięk, obracane karty z mnemonikami</p></div>
+    <div class="step"><div class="num">③</div><h4>Ćwiczenia</h4><p>Literowanie imion, adresów, e-maili, tablic</p></div>
+    <div class="step"><div class="num">④</div><h4>Rozmowa</h4><p>Realistyczne dialogi PL+EN z nagraniami 🔊</p></div>
+    <div class="step"><div class="num">⑤</div><h4>Quiz</h4><p>Sprawdź się — wybór, luki, słuchanie</p></div>
+  </div>
+</section>
+
+<div id="pwa-banner">
+  <p>📲 <strong>Zainstaluj Anglo-Sapiens</strong><br>Działa offline, ikona na ekranie głównym.</p>
+  <button id="pwa-install">Zainstaluj</button>
+  <button id="pwa-close">✕</button>
+</div>
+
+<footer>Anglo-Sapiens · Angielski dla każdego Polaka · github.io</footer>
+
+<script>
+  // PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/anglo-sapiens/sw.js', { scope: '/anglo-sapiens/' })
+      .catch(()=>{}); // graceful fail on local
+  }
+
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('pwa-banner').style.display = 'flex';
+  });
+  document.getElementById('pwa-install').addEventListener('click', () => {
+    if (deferredPrompt) { deferredPrompt.prompt(); }
+    document.getElementById('pwa-banner').style.display = 'none';
+  });
+  document.getElementById('pwa-close').addEventListener('click', () => {
+    document.getElementById('pwa-banner').style.display = 'none';
+  });
+</script>
+</body>
+</html>
